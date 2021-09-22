@@ -1,6 +1,7 @@
 import spotifyAPI
 import geniusAPI
 import flask
+import os
 
 app = flask.Flask(__name__)
 
@@ -15,6 +16,5 @@ def index():
     songName = spotify.randomSongName, songLink = spotify.randomSongLink, songPreviewURL = spotify.randomSongPreviewURL, 
     artistName = spotify.randomArtistName, artistLink = spotify.randomArtistLink, songLyrics = genius.songLyrics)
 
-app.run(
-    debug=True
+app.run(debug=True, host = '0.0.0.0', port=int(os.getenv('PORT',8080))
 )
