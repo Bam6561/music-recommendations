@@ -3,6 +3,7 @@ from dotenv import find_dotenv, load_dotenv
 import requests
 import base64
 import json
+import flask
 
 load_dotenv(find_dotenv())
 clientID = os.getenv("CLIENT_ID")
@@ -19,3 +20,13 @@ tokenHeaders = {
 authorizationResponse = requests.post(authorizationURL, data=tokenData, headers=tokenHeaders)
 authorizationResponseData = authorizationResponse.json()
 accessToken = authorizationResponseData['access_token']
+
+app = flask.Flask(__name__)
+
+@app.route("/")
+def index():
+    return flask.render_template("index.html")
+
+app.run(
+    debug=True
+)
