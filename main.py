@@ -9,7 +9,7 @@ import random
 load_dotenv(find_dotenv()) #Environment variables
 spotifyClientID = os.getenv("SPOTIFY_CLIENT_ID")
 spotifyClientSecret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
+geniusToken = os.getenv("GENIUS_TOKEN")
 
 spotifyClientCredentials = f"{spotifyClientID}:{spotifyClientSecret}" #Spotify credentials & access token
 spotifyClientCredentialsB64 = base64.b64encode(spotifyClientCredentials.encode())
@@ -23,7 +23,7 @@ tokenHeaders = {
 authorizationResponse = requests.post(authorizationURL, data=tokenData, headers=tokenHeaders)
 authorizationResponseData = authorizationResponse.json()
 accessToken = authorizationResponseData['access_token']
-headers = { 
+spotifyHeaders = { 
     "Authorization": "Bearer " +accessToken
 }
 
@@ -37,10 +37,20 @@ randomArtistName = []
 randomArtistLink = []
 randomAlbumLink = []
 
+geniusUrl = "http://api.genius.com/search" #Genius credentials
+tokenHeaders = {
+    'Authorization': 'Bearer ' +geniusToken
+    }
+songName = "In the Midst of It All"
+params = {
+    'q': songName
+    }
+geniusResponse = requests.get(geniusUrl, params=params, headers=tokenHeaders)
+
 for id in ids: #Artists' top track (US)
     endpoint = f"https://api.spotify.com/v1/artists/{id}/top-tracks"
     endpointQueries = f"{endpoint}{queries}"
-    result = requests.get(url=endpointQueries, headers=headers)
+    result = requests.get(url=endpointQueries, headers=spotifyHeaders)
     randomSelect = random.randint(0, 9) #Random 
     y = 0
     for x in result.json()['tracks']:
@@ -54,14 +64,8 @@ for id in ids: #Artists' top track (US)
             randomAlbumLink.append(x['album']['external_urls']['spotify']) 
             break
         y += 1
-print(randomImagePreview)
-print(randomSongName)
-print(randomSongLink)
-print(randomSongPreviewURL)
-print(randomArtistName)
-print(randomArtistLink)
-print(randomAlbumLink)
-
+#songLink = "http://genius.com" + 
+print(geniusResponse.json()['response']['hits'][0]['result']['path'])
 
 ##app = flask.Flask(__name__)
 
