@@ -4,11 +4,13 @@ import requests
 import base64
 import json
 import flask
+import random
 
-load_dotenv(find_dotenv())
+load_dotenv(find_dotenv()) #Environment variables
 clientID = os.getenv("CLIENT_ID")
 clientSecret = os.getenv("CLIENT_SECRET")
-clientCredentials = f"{clientID}:{clientSecret}"
+
+clientCredentials = f"{clientID}:{clientSecret}" #Spotify credentials & access token
 clientCredentialsB64 = base64.b64encode(clientCredentials.encode())
 authorizationURL = "https://accounts.spotify.com/api/token"
 tokenData = {
@@ -20,19 +22,22 @@ tokenHeaders = {
 authorizationResponse = requests.post(authorizationURL, data=tokenData, headers=tokenHeaders)
 authorizationResponseData = authorizationResponse.json()
 accessToken = authorizationResponseData['access_token']
-ids = ['1EqmdzkoxPJlQP039YoGCq', '4iJLPqClelZOBCBifm8Fzv', '7H55rcKCfwqkyDFH9wpKM6'] 
-queries = "?market=US"
-headers = {
+headers = { 
     "Authorization": "Bearer " +accessToken
 }
-for id in ids:
+
+ids = ['1EqmdzkoxPJlQP039YoGCq', '4iJLPqClelZOBCBifm8Fzv', '7H55rcKCfwqkyDFH9wpKM6'] #Vivid Undress, Pierce the Veil, Christina Perri
+queries = "?market=US" 
+topSongs = []
+randomSongs = []
+for id in ids: #Artists' top track (US)
     endpoint = f"https://api.spotify.com/v1/artists/{id}/top-tracks"
     endpointQueries = f"{endpoint}{queries}"
     result = requests.get(url=endpointQueries, headers=headers)
     for x in result.json()['tracks']:
-        topSong = (x['name'])
-        print(topSong)
-        break
+        topSongs.append(x['name'])
+    randomSongs.append(topSongs[random.randint(0, len(topSongs)-1)])
+print(randomSongs)
 
 ##app = flask.Flask(__name__)
 
