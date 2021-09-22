@@ -17,8 +17,7 @@ class geniusAPI:
         params = {
             'q': songName
         }
-        geniusResponse = requests.get(
+        geniusResponse = requests.get( # Parse Genius lyrics link
             geniusUrl, params=params, headers=tokenHeaders)
-        geniusSongPath = geniusResponse.json(
-        )['response']['hits'][0]['result']['path']
+        geniusSongPath = geniusResponse.json()['response']['hits'][0]['result']['path']
         self.songLyrics.append("http://genius.com" + geniusSongPath)

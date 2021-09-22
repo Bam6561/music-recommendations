@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+body {
+    font-size: 24px;
+    font-family:'Poppins', sans-serif;
+    background-image: url('/static/images/spotifyBackground.jpg');
+    text-align:center;
+}
+
+.banner {
+    height:100%;
+    width:33%;
+    float:left;
+    text-align:center;
+}

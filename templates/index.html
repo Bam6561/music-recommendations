@@ -2,8 +2,17 @@
 <html>
     <head>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-        <title></title>
+        <title>Music Recommendations</title>
     </head>
     <body>
+        <h1><ul>Based on Danny's Music Preferences:</ul></h1>
+        {%for i in range(0, len)%}
+            <div class="banner">
+                <img src={{imagePreview[i]}} width="300" height="300"><br><br>
+                <a href="{{songLink[i]}}">{{songName[i]}}</a><br>
+                <audio controls><source src="{{songPreviewURL[i]}}" type="audio/ogg"></audio><br>
+                <a href="{{artistLink[i]}}">{{artistName[i]}}</a>
+            </div>
+        {%endfor%}
     </body>
 </html>

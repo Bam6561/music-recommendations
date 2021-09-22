@@ -4,24 +4,17 @@ import flask
 
 app = flask.Flask(__name__)
 
-def main():
-    spotify = spotifyAPI.spotifyAPI()
-    genius = geniusAPI.geniusAPI()
-    spotify.fetchArtistSongData()
-    for x in spotify.randomSongName:
+@app.route("/")
+def index():
+    spotify = spotifyAPI.spotifyAPI() # Spotify Access
+    genius = geniusAPI.geniusAPI() # Genius Access
+    spotify.fetchArtistSongData() # Randomized tracks
+    for x in spotify.randomSongName: # Song lyrics for randomized tracks 
         genius.fetchSongLyrics(x)
-    print(genius.songLyrics)
+    return flask.render_template("index.html", len = len(spotify.artistID), imagePreview = spotify.randomImagePreview, 
+    songName = spotify.randomSongName, songLink = spotify.randomSongLink, songPreviewURL = spotify.randomSongPreviewURL, 
+    artistName = spotify.randomArtistName, artistLink = spotify.randomArtistLink, songLyrics = genius.songLyrics)
 
-if __name__ == "__main__":
-    main()
-
-#@app.route("/")
-#def index():
-#    spotify = spotifyAPI()
-#    genius = geniusAPI()
-#    print(spotify.fetchArtistSongData())
-#    return flask.render_template("index.html")
-
-#app.run(
-#    debug=True
-#)
+app.run(
+    debug=True
+)

@@ -7,20 +7,23 @@ import random
 
 class spotifyAPI:
     def __init__(self):
+        self.artistID = ['6Wr3hh341P84m3EI8qdn9O', '4iJLPqClelZOBCBifm8Fzv', 
+        '7H55rcKCfwqkyDFH9wpKM6'] # Rise Against, Pierce the Veil, Christina Perri
         self.randomImagePreview = []
         self.randomSongName = []
         self.randomSongLink = []
         self.randomSongPreviewURL = []
         self.randomArtistName = []
         self.randomArtistLink = []
-        self.randomAlbumLink = []
 
     def fetchArtistSongData(self):
-        load_dotenv(find_dotenv())  # Environment variables
+        # Environment variables
+        load_dotenv(find_dotenv())  
         spotifyClientID = os.getenv("SPOTIFY_CLIENT_ID")
         spotifyClientSecret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-        spotifyClientCredentials = f"{spotifyClientID}:{spotifyClientSecret}" # Spotify credentials & access token
+        # Spotify credentials & access token
+        spotifyClientCredentials = f"{spotifyClientID}:{spotifyClientSecret}" 
         spotifyClientCredentialsB64 = base64.b64encode(
         spotifyClientCredentials.encode())
         authorizationURL = "https://accounts.spotify.com/api/token"
@@ -37,13 +40,9 @@ class spotifyAPI:
         spotifyHeaders = {
             "Authorization": "Bearer " + accessToken
         }
-
-        # Rise Against, Pierce the Veil, Christina Perri
-        ids = ['6Wr3hh341P84m3EI8qdn9O',
-               '4iJLPqClelZOBCBifm8Fzv', '7H55rcKCfwqkyDFH9wpKM6']
         queries = "?market=US"
 
-        for id in ids:  # Artists' top track (US)
+        for id in self.artistID:  # Artists' top track (US)
             endpoint = f"https://api.spotify.com/v1/artists/{id}/top-tracks"
             endpointQueries = f"{endpoint}{queries}"
             result = requests.get(url=endpointQueries, headers=spotifyHeaders)
@@ -58,7 +57,6 @@ class spotifyAPI:
                     self.randomArtistName.append(x['artists'][0]['name'])
                     self.randomArtistLink.append(
                     x['album']['artists'][0]['external_urls']['spotify'])
-                    self.randomAlbumLink.append(x['album']['external_urls']['spotify'])
                     break
                 y += 1
 
